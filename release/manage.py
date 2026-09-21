@@ -80,6 +80,9 @@ def configure(context,profile_path):
  override['services']['web']={'volumes':[str(nginx_path)+':/etc/nginx/conf.d/default.conf:ro']}
  override_path=folder/'compose.override.json';override_path.write_text(json.dumps(override,indent=2)+'\n')
  sources=json.loads(gcx(context,'datasources','list').stdout).get('datasources',[]);mapping={}
+ for source in sources:
+  if not source.get('type'):
+   source['type']=json.loads(gcx(context,'datasources','get',source['uid']).stdout).get('spec',{}).get('type','')
  for kind in ('prometheus','loki','tempo','pyroscope'):
   choices=[d for d in sources if d['type']==({'pyroscope':'grafana-pyroscope-datasource'}.get(kind,kind))]
   selected=profile.get('datasources',{}).get(kind)

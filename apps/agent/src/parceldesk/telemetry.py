@@ -13,7 +13,7 @@ from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
 from opentelemetry.instrumentation.httpx import HTTPXClientInstrumentor
 from prometheus_client import Counter, Histogram, Gauge
 from agento11y import Client, ClientConfig, GenerationExportConfig, ApiConfig, AuthConfig, HooksConfig, ContentCaptureMode
-from . import config
+from . import config, profiling
 
 turns=Counter('parceldesk_turns_total','Completed turns',['outcome','traffic_kind'])
 guards=Counter('parceldesk_guard_decisions_total','Actual guard decisions',['action','source'])
@@ -30,7 +30,10 @@ last_reset=Gauge('parceldesk_last_reset_timestamp_seconds','Successful reset wal
 def setup():
     # Explicit endpoint+empty headers prevent inherited host credentials from escaping into the wrong stack.
     base=os.getenv('OTEL_EXPORTER_OTLP_ENDPOINT','http://alloy:4318').rstrip('/')
-    resource=Resource.create({'service.name':'parceldesk-agent','service.namespace':'parceldesk','service.version':os.getenv('SERVICE_VERSION','development'),'deployment.environment.name':'demo-local'})
+    attributes={'service.name':'parceldesk-agent','service.namespace':'parceldesk','service.version':os.getenv('SERVICE_VERSION','development'),'deployment.environment.name':os.getenv('DEPLOYMENT_ENVIRONMENT','demo-local')}
+    if os.getenv('GIT_COMMIT'): attributes['vcs.ref.head.revision']=os.environ['GIT_COMMIT']
+    if os.getenv('SERVICE_REPOSITORY'): attributes['vcs.repository.url.full']=os.environ['SERVICE_REPOSITORY']
+    resource=Resource.create(attributes)
     tp=TracerProvider(resource=resource);tp.add_span_processor(BatchSpanProcessor(OTLPSpanExporter(endpoint=base+'/v1/traces',headers={})));trace.set_tracer_provider(tp)
     mp=MeterProvider(resource=resource,metric_readers=[PeriodicExportingMetricReader(OTLPMetricExporter(endpoint=base+'/v1/metrics',headers={}),export_interval_millis=10000)]);metrics.set_meter_provider(mp)
     lp=LoggerProvider(resource=resource);lp.add_log_record_processor(BatchLogRecordProcessor(OTLPLogExporter(endpoint=base+'/v1/logs',headers={})));_logs.set_logger_provider(lp)
@@ -38,7 +41,8 @@ def setup():
     HTTPXClientInstrumentor().instrument()
     c=Client(ClientConfig(generation_export=GenerationExportConfig(protocol='http',endpoint=config.GEN_ENDPOINT,auth=AuthConfig(mode='basic',basic_user=config.CLOUD_TENANT,basic_password=config.CLOUD_TOKEN)),api=ApiConfig(endpoint=config.GEN_ENDPOINT),hooks=HooksConfig(enabled=True,phases=['postflight'],timeout_seconds=5,fail_open=False),content_capture=ContentCaptureMode.FULL,agent_name='parceldesk-replacement'))
     build.labels(os.getenv('SERVICE_VERSION','development')).set(1)
-    return c,[tp,mp,lp]
+    profiler=profiling.start()
+    return c,[*([profiler] if profiler is not None else []),tp,mp,lp]
 
 def log(event,**fields):
     s=trace.get_current_span().get_span_context()

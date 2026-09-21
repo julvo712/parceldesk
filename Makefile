@@ -16,7 +16,7 @@ help:
 install:
 	python3 release/manage.py install --context "$(CONTEXT)" --cloud-config "$(CLOUD_CONFIG)"
 up:
-	python3 -c 'import importlib.util; s=importlib.util.spec_from_file_location("manager","release/manage.py"); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.run(m.compose("up","--detach","--build","--wait","--wait-timeout","180")); print("ParcelDesk started; run make doctor")'
+	python3 tools/runtime.py up
 down:
 	python3 -c 'import importlib.util; s=importlib.util.spec_from_file_location("manager","release/manage.py"); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.run(m.compose("stop"))'
 doctor:

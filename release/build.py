@@ -3,7 +3,7 @@
 from __future__ import annotations
 import argparse,gzip,hashlib,io,json,os,pathlib,re,subprocess,tarfile
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-ALLOW_DIRS={'.github','agents','apps','config','design','docs','evals','fixtures','infra','release','services','tools'}
+ALLOW_DIRS={'.github','agents','apps','config','design','docs','evals','fixtures','infra','release','services','tools','load'}
 ALLOW_FILES={'AGENTS.md','README.md','Makefile','compose.yaml','compose.test.yaml','.gitignore','.dockerignore','pyproject.toml','uv.lock'}
 EXCLUDE={'node_modules','.venv','__pycache__','.pytest_cache','dist','runs','.secrets','.git','.worktrees','playwright-report','test-results','backups','evidence','verification','bin'}
 SECRET_PATTERN=re.compile(rb'(?:glsa_[A-Za-z0-9_]{20,}|glc_[A-Za-z0-9_=-]{30,}|sk-ant-[A-Za-z0-9_-]{25,}|AIza[A-Za-z0-9_-]{30,})')
