@@ -8,7 +8,7 @@ This public repository starts from a scanned source snapshot. Local credentials,
 recordings, captured conversations, dashboard backups and the private development
 history are excluded. The fixture customers and orders are fictional.
 
-The current foundation work adds versioned continuous profiling and direct GitHub
+The [observability foundation](docs/observability-foundation.md) adds versioned continuous profiling and direct GitHub
 reporting. Older presenter documents describe the previous demo; its custom
 candidate ledger is not a native productivity feature and is not used by the new
 AI investment and delivery dashboard.

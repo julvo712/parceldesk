@@ -1,0 +1,9 @@
+---
+description: Use Grafana Cloud evidence when investigating ParcelDesk performance
+alwaysApply: true
+---
+Follow AGENTS.md and docs/observability-foundation.md.
+Use gcx with --context demotests_gcloud for profile, trace and metric queries.
+Compare the running service version with the code before proposing a change.
+Never read or print .secrets, gcx raw configuration, or authentication tokens.
+Query Grafana directly; do not treat the legacy candidate ledger as productivity.

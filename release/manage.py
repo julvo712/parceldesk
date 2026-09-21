@@ -93,8 +93,12 @@ def configure(context,profile_path):
  spec=importlib.util.spec_from_file_location('pd_dashboards',ROOT/'infra/grafana/generate.py');generator=importlib.util.module_from_spec(spec);spec.loader.exec_module(generator)
  manifest_path=ROOT/'infra/grafana/manifest.json';prior=manifest_path.read_bytes() if manifest_path.exists() else None
  resources=folder/'dashboards'
- try:generator.generate(resources,mapping)
+ prior_path=sys.path[:]
+ try:
+  sys.path.insert(0,str(ROOT/'infra/grafana'))
+  generator.generate(resources,mapping)
  finally:
+  sys.path[:]=prior_path
   if prior is not None:manifest_path.write_bytes(prior)
   elif manifest_path.exists():manifest_path.unlink()
  local_manifest={'context':context,'server':profile['grafana_url'],'datasources':mapping,'resources':str(resources)};(folder/'dashboard-manifest.json').write_text(json.dumps(local_manifest,indent=2)+'\n')
