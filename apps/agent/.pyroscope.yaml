@@ -1,0 +1,9 @@
+version: v1
+source_code:
+  mappings:
+    - path:
+        - prefix: /app/src
+      language: python
+      source:
+        local:
+          path: src
