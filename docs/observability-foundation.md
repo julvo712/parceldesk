@@ -64,7 +64,7 @@ activate a fault or reset the presenter's current customer run.
 - `/d/pd-runtime-versions`: CPU, allocations and live heap by service version;
   customer request throughput and p95 latency; selected-version CPU flamegraph.
 - `/d/pd-ai-delivery`: native model-cost counters, actual merged PRs and median
-  creation-to-merge time, CI workflow outcomes, published GitHub releases.
+  creation-to-merge time, CI workflow outcomes across branches, published GitHub releases.
 
 Generate with `python3 infra/grafana/foundation_dashboards.py`. Validate and push
 only `infra/grafana/foundation/resources` through gcx in `demotests_gcloud`.

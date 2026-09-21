@@ -259,7 +259,8 @@
                   "unit": "none",
                   "noValue": "No observations",
                   "color": {
-                    "mode": "palette-classic"
+                    "mode": "fixed",
+                    "fixedColor": "blue"
                   },
                   "thresholds": {
                     "mode": "absolute",
@@ -362,7 +363,8 @@
                   "unit": "s",
                   "noValue": "No observations",
                   "color": {
-                    "mode": "palette-classic"
+                    "mode": "fixed",
+                    "fixedColor": "blue"
                   },
                   "thresholds": {
                     "mode": "absolute",
@@ -493,7 +495,8 @@
                   "unit": "none",
                   "noValue": "No observations",
                   "color": {
-                    "mode": "palette-classic"
+                    "mode": "fixed",
+                    "fixedColor": "blue"
                   },
                   "thresholds": {
                     "mode": "absolute",
@@ -643,8 +646,8 @@
         "kind": "Panel",
         "spec": {
           "id": 7,
-          "title": "CI outcomes",
-          "description": "Native GitHub data source summary for the release-check workflow on main.",
+          "title": "CI outcomes \u2022 all branches",
+          "description": "Native GitHub data source summary for the release-check workflow across repository branches. Superseded runs may be cancelled.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -667,8 +670,7 @@
                         "owner": "julvo712",
                         "repository": "parceldesk",
                         "options": {
-                          "workflow": "ci.yml",
-                          "branch": "main"
+                          "workflow": "ci.yml"
                         }
                       }
                     }
