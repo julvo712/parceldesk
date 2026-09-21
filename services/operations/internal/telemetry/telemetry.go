@@ -28,7 +28,21 @@ func Init(ctx context.Context, service string) (func(context.Context) error, err
 	if version == "" {
 		version = "0.1.0"
 	}
-	r, err := resource.Merge(resource.Default(), resource.NewSchemaless(attribute.String("service.name", service), attribute.String("service.version", version), attribute.String("service.namespace", "parceldesk"), attribute.String("deployment.environment.name", "demo")))
+	environment := os.Getenv("DEPLOYMENT_ENVIRONMENT")
+	if environment == "" {
+		environment = "demo-local"
+	}
+	attributes := []attribute.KeyValue{attribute.String("service.name", service), attribute.String("service.version", version), attribute.String("service.namespace", "parceldesk"), attribute.String("deployment.environment.name", environment)}
+	tags := map[string]string{"service_name": service, "service_namespace": "parceldesk", "deployment_environment": environment, "service_version": version, "service_root_path": "services/operations"}
+	if sha := os.Getenv("GIT_COMMIT"); sha != "" {
+		attributes = append(attributes, attribute.String("vcs.ref.head.revision", sha))
+		tags["service_git_ref"] = sha
+	}
+	if repo := os.Getenv("SERVICE_REPOSITORY"); repo != "" {
+		attributes = append(attributes, attribute.String("vcs.repository.url.full", repo))
+		tags["service_repository"] = repo
+	}
+	r, err := resource.Merge(resource.Default(), resource.NewSchemaless(attributes...))
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +69,7 @@ func Init(ctx context.Context, service string) (func(context.Context) error, err
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 	var profiler *pyroscope.Profiler
 	if endpoint := os.Getenv("PYROSCOPE_SERVER_ADDRESS"); endpoint != "" {
-		profiler, err = pyroscope.Start(pyroscope.Config{ApplicationName: service, ServerAddress: endpoint, Tags: map[string]string{"service_name": service, "service_namespace": "parceldesk", "deployment_environment": "demo"}, ProfileTypes: []pyroscope.ProfileType{pyroscope.ProfileCPU, pyroscope.ProfileAllocObjects, pyroscope.ProfileAllocSpace, pyroscope.ProfileInuseObjects, pyroscope.ProfileInuseSpace}})
+		profiler, err = pyroscope.Start(pyroscope.Config{ApplicationName: service, ServerAddress: endpoint, Tags: tags, ProfileTypes: []pyroscope.ProfileType{pyroscope.ProfileCPU, pyroscope.ProfileAllocObjects, pyroscope.ProfileAllocSpace, pyroscope.ProfileInuseObjects, pyroscope.ProfileInuseSpace}})
 		if err != nil {
 			return nil, err
 		}

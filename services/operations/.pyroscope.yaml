@@ -1,0 +1,9 @@
+version: v1
+source_code:
+  mappings:
+    - path:
+        - prefix: github.com/parceldesk/operations/
+      language: go
+      source:
+        local:
+          path: .

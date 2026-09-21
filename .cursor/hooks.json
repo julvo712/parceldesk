@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "./tools/coding/launch.sh cursor hook"
+      }
+    ],
+    "sessionEnd": [
+      {
+        "command": "./tools/coding/launch.sh cursor hook"
+      }
+    ],
+    "beforeSubmitPrompt": [
+      {
+        "command": "./tools/coding/launch.sh cursor hook"
+      }
+    ],
+    "preToolUse": [
+      {
+        "command": "./tools/coding/launch.sh cursor hook"
+      }
+    ],
+    "postToolUse": [
+      {
+        "command": "./tools/coding/launch.sh cursor hook"
+      }
+    ],
+    "postToolUseFailure": [
+      {
+        "command": "./tools/coding/launch.sh cursor hook"
+      }
+    ],
+    "afterAgentResponse": [
+      {
+        "command": "./tools/coding/launch.sh cursor hook"
+      }
+    ],
+    "afterAgentThought": [
+      {
+        "command": "./tools/coding/launch.sh cursor hook"
+      }
+    ],
+    "stop": [
+      {
+        "command": "./tools/coding/launch.sh cursor hook"
+      }
+    ]
+  }
+}

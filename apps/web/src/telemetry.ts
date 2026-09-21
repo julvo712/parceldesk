@@ -7,7 +7,7 @@ export function startTelemetry() {
   const ownApi = new RegExp(`^${location.origin.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/api(?:/|$)`);
   initializeFaro({
     url: `${location.origin}/collect`,
-    app: { name: 'parceldesk-web', version: '1.0.0', environment: 'demo' },
+    app: { name: 'parceldesk-web', version: import.meta.env.VITE_SERVICE_VERSION || 'development', environment: 'demo-local' },
     sessionTracking: { samplingRate: 1 },
     instrumentations: [...getWebInstrumentations({ captureConsole: false }), new TracingInstrumentation({ instrumentations: getDefaultOTELInstrumentations({ propagateTraceHeaderCorsUrls: [ownApi], ignoreUrls: [/\/collect(?:\/|$)/, /\/control(?:\/|$)/] }) })],
     beforeSend: (item) => {

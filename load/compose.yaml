@@ -1,0 +1,15 @@
+services:
+  load:
+    image: grafana/k6:2.2.0
+    profiles: [load]
+    user: "0:0"
+    volumes:
+      - ./load:/scripts:ro
+      - ./runs/foundation:/results
+    environment:
+      BASE_URL: http://web:8080
+      RUN_ID: ${RUN_ID:?Set a unique workload RUN_ID}
+      SERVICE_VERSION: ${SERVICE_VERSION:-development}
+      RATE: ${RATE:-10}
+      DURATION: ${DURATION:-2m}
+    command: [run, --summary-export=/results/k6-summary.json, /scripts/orders.js]

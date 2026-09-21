@@ -1,0 +1,12 @@
+{
+  "apiVersion": "grafana-github-datasource.datasource.grafana.app/v0alpha1",
+  "kind": "DataSource",
+  "metadata": {"name": "pd-github"},
+  "spec": {
+    "type": "grafana-github-datasource",
+    "title": "ParcelDesk GitHub",
+    "access": "proxy",
+    "jsonData": {"selectedAuthType": "personal-access-token", "githubPlan": "free", "cachingEnabled": true}
+  },
+  "secure": {"accessToken": {"fromFile": ".secrets/github_read_token"}}
+}
