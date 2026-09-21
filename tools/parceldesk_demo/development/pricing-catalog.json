@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-09-15",
+  "currency": "USD",
+  "basis": "API-equivalent consumption; never subscription invoices",
+  "normalization": "input excludes cache_read and cache_write; missing buckets are null, not zero",
+  "models": {
+    "claude-haiku-4-5-20251001": {
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "effective_date": "2026-09-15",
+      "scope": "standard global first-party API-equivalent estimate",
+      "usd_per_million": {
+        "input": "1",
+        "output": "5",
+        "cache_read": "0.10"
+      },
+      "cache_write_note": "TTL unavailable in generic cache_write bucket; nonzero writes remain unpriced unless upstream supplies an estimate with provenance"
+    },
+    "claude-sonnet-5": {
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "effective_date": "2026-09-15",
+      "scope": "standard global first-party API-equivalent estimate",
+      "usd_per_million": {
+        "input": "2",
+        "output": "10",
+        "cache_read": "0.20"
+      },
+      "cache_write_note": "TTL unavailable in generic cache_write bucket; nonzero writes remain unpriced unless upstream supplies an estimate with provenance"
+    },
+    "claude-fable-5": {
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "effective_date": "2026-09-15",
+      "scope": "standard global first-party API-equivalent estimate",
+      "usd_per_million": {
+        "input": "10",
+        "output": "50",
+        "cache_read": "1"
+      },
+      "cache_write_note": "TTL unavailable in generic cache_write bucket; nonzero writes remain unpriced unless upstream supplies an estimate with provenance"
+    },
+    "claude-fable-5-1": {
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "effective_date": "2026-09-15",
+      "scope": "standard global first-party API-equivalent estimate",
+      "usd_per_million": {
+        "input": "10",
+        "output": "50",
+        "cache_read": "0.25"
+      },
+      "cache_write_note": "TTL unavailable in generic cache_write bucket; nonzero writes remain unpriced unless upstream supplies an estimate with provenance"
+    },
+    "claude-opus-5": {
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "effective_date": "2026-09-15",
+      "scope": "standard global first-party API-equivalent estimate",
+      "usd_per_million": {
+        "input": "5",
+        "output": "25",
+        "cache_read": "0.50"
+      },
+      "cache_write_note": "TTL unavailable in generic cache_write bucket; nonzero writes remain unpriced unless upstream supplies an estimate with provenance"
+    }
+  }
+}

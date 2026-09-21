@@ -1,0 +1,54 @@
+name: ParcelDesk release checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: parceldesk-ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  contracts-database-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: services/operations/go.mod
+          cache-dependency-path: services/operations/go.sum
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.11.25'
+          enable-cache: true
+      - name: Install locked test dependencies
+        run: |
+          uv sync --directory apps/agent --locked
+          npm --prefix apps/web ci
+          cd apps/web
+          npx playwright install --with-deps chromium
+      - name: Execute contracts, real PostgreSQL concurrency, browser and credential checks
+        run: make acceptance
+      - name: Explain live acceptance boundary
+        if: always()
+        run: |
+          echo 'Live Cloud, provider calls and native guard/eval acceptance are deliberately not run in this credential-free job.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The browser suite uses declared HTTP fixtures. Human presenter pilots remain separately recorded gates.' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: automated-release-evidence
+          path: |
+            runs/release-check.json
+            apps/web/playwright-report
+            apps/web/test-results
+          retention-days: 14

@@ -1,0 +1,110 @@
+[
+  {
+    "name": "hero",
+    "source": "design/generated/contact-sheet.png",
+    "crop": [
+      0,
+      0,
+      512,
+      512
+    ],
+    "width": 512,
+    "height": 512,
+    "formats": [
+      "webp",
+      "avif"
+    ],
+    "generator": "built-in image_gen",
+    "alt": "Cream headphones on a warm wooden desk"
+  },
+  {
+    "name": "headphones",
+    "source": "design/generated/contact-sheet.png",
+    "crop": [
+      512,
+      0,
+      1024,
+      512
+    ],
+    "width": 512,
+    "height": 512,
+    "formats": [
+      "webp",
+      "avif"
+    ],
+    "generator": "built-in image_gen",
+    "alt": "Arc One cream over-ear headphones"
+  },
+  {
+    "name": "speaker",
+    "source": "design/generated/contact-sheet.png",
+    "crop": [
+      1024,
+      0,
+      1536,
+      512
+    ],
+    "width": 512,
+    "height": 512,
+    "formats": [
+      "webp",
+      "avif"
+    ],
+    "generator": "built-in image_gen",
+    "alt": "Sage green portable speaker"
+  },
+  {
+    "name": "earbuds",
+    "source": "design/generated/contact-sheet.png",
+    "crop": [
+      0,
+      512,
+      512,
+      1024
+    ],
+    "width": 512,
+    "height": 512,
+    "formats": [
+      "webp",
+      "avif"
+    ],
+    "generator": "built-in image_gen",
+    "alt": "Ivory wireless earbuds in an open case"
+  },
+  {
+    "name": "packaging",
+    "source": "design/generated/contact-sheet.png",
+    "crop": [
+      512,
+      512,
+      1024,
+      1024
+    ],
+    "width": 512,
+    "height": 512,
+    "formats": [
+      "webp",
+      "avif"
+    ],
+    "generator": "built-in image_gen",
+    "alt": "Pristine shipping box beside cream headphones"
+  },
+  {
+    "name": "damage",
+    "source": "design/generated/contact-sheet.png",
+    "crop": [
+      1024,
+      512,
+      1536,
+      1024
+    ],
+    "width": 512,
+    "height": 512,
+    "formats": [
+      "webp",
+      "avif"
+    ],
+    "generator": "built-in image_gen",
+    "alt": "Damaged shipping box and cracked headphone earcup"
+  }
+]

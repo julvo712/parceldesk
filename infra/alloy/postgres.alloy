@@ -1,0 +1,26 @@
+// Append to the main configuration and mount postgres_password as an Alloy secret.
+// Ordinary PostgreSQL exporter metrics, not a claim of native Database Observability enablement.
+local.file "postgres_password" {
+  filename = "/run/secrets/postgres_password"
+  is_secret = true
+}
+prometheus.exporter.postgres "parceldesk" {
+  data_source_names = ["postgresql://parceldesk_monitor:" + encoding.url_encode(string.trim_space(convert.nonsensitive(local.file.postgres_password.content))) + "@postgres:5432/parceldesk?sslmode=disable"]
+  enabled_collectors = ["database", "locks", "long_running_transactions", "stat_database", "stat_user_tables"]
+}
+prometheus.scrape "postgres" {
+  targets = prometheus.exporter.postgres.parceldesk.targets
+  scrape_interval = "10s"
+  forward_to = [prometheus.relabel.postgres.receiver]
+}
+prometheus.relabel "postgres" {
+  forward_to = [prometheus.remote_write.cloud.receiver]
+  rule {
+    target_label = "job"
+    replacement = "integrations/postgres_exporter"
+  }
+  rule {
+    target_label = "service_name"
+    replacement = "parceldesk-postgres"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "parceldesk-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "vitest run src",
+    "test:browser": "playwright test"
+  },
+  "dependencies": {
+    "@grafana/faro-web-sdk": "^2.0.0",
+    "@grafana/faro-web-tracing": "^2.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "lucide-react": "^0.468.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.55.0",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.4.1",
+    "typescript": "~5.9.2",
+    "vite": "^7.0.0",
+    "vitest": "^3.2.0",
+    "jsdom": "^26.0.0"
+  }
+}

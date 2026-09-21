@@ -1,0 +1,16 @@
+{
+  "agent_version": "ec9db6dc9f61060d",
+  "provider": "anthropic",
+  "model": "claude-sonnet-4-5-20250929",
+  "evaluator_version": "2",
+  "suite": "full",
+  "suite_version": "v1",
+  "experiment_id": "exp-344d03a168eaab71",
+  "evidence_ref": "https://demotests.grafana.net/a/grafana-agento11y-app/experiments/runs/exp-344d03a168eaab71",
+  "verified_trials": 36,
+  "passed_trials": 36,
+  "verified_date": "2026-09-15",
+  "heldout_experiment_id": "exp-4cd2936409f72331",
+  "heldout_trials": 3,
+  "heldout_passed": 3
+}

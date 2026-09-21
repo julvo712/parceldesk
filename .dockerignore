@@ -1,0 +1,13 @@
+.secrets
+.env
+.env.*
+.git
+runs
+.worktrees
+**/node_modules
+**/.venv
+**/__pycache__
+**/test-results
+**/playwright-report
+release/dist
+research

@@ -1,0 +1,122 @@
+local.file "profiles_token" { filename = "/run/secrets/profiles_token" }
+logging { level = "info" }
+local.file "token" { filename = "/run/secrets/cloud_token" }
+otelcol.auth.basic "cloud" {
+  username = "1708469"
+  password = local.file.token.content
+}
+otelcol.receiver.otlp "app" {
+  grpc { endpoint = "0.0.0.0:4317" }
+  http { endpoint = "0.0.0.0:4318" }
+  output {
+    traces = [otelcol.processor.batch.cloud.input]
+    metrics = [otelcol.processor.batch.cloud.input]
+    logs = [otelcol.processor.batch.cloud.input]
+  }
+}
+otelcol.processor.batch "cloud" {
+  timeout = "2s"
+  output {
+    traces = [otelcol.exporter.otlphttp.cloud.input]
+    metrics = [otelcol.exporter.otlphttp.cloud.input]
+    logs = [otelcol.exporter.otlphttp.cloud.input]
+  }
+}
+otelcol.exporter.otlphttp "cloud" {
+  client {
+    endpoint = "https://otlp-gateway-prod-eu-west-2.grafana.net/otlp"
+    auth = otelcol.auth.basic.cloud.handler
+  }
+}
+prometheus.remote_write "cloud" {
+  endpoint {
+    url = "https://prometheus-prod-65-prod-eu-west-2.grafana.net/api/prom/push"
+    basic_auth {
+      username = "3341162"
+      password = local.file.token.content
+    }
+  }
+}
+prometheus.scrape "app" {
+  targets = [{"__address__"="agent-api:8000", "job"="parceldesk", "service_name"="parceldesk-agent"}]
+  scrape_interval = "10s"
+  forward_to = [prometheus.remote_write.cloud.receiver]
+}
+loki.write "cloud" {
+  endpoint {
+    url = "https://logs-prod-012.grafana.net/loki/api/v1/push"
+    basic_auth {
+      username = "1666256"
+      password = local.file.token.content
+    }
+  }
+}
+faro.receiver "web" {
+  server {
+    listen_address = "0.0.0.0"
+    listen_port = 12347
+    cors_allowed_origins = ["http://localhost:3100", "http://127.0.0.1:3100"]
+  }
+  extra_log_labels = {"service_name"="parceldesk-web", "app"="parceldesk"}
+  output {
+    logs = [loki.write.cloud.receiver]
+    traces = [otelcol.processor.batch.cloud.input]
+  }
+}
+pyroscope.receive_http "app" {
+  http {
+    listen_address = "0.0.0.0"
+    listen_port = 4040
+  }
+  forward_to = [pyroscope.write.cloud.receiver]
+}
+pyroscope.write "cloud" {
+  endpoint {
+    url = "https://profiles-prod-002.grafana.net"
+    basic_auth {
+      username = "1708469"
+      password = local.file.profiles_token.content
+    }
+  }
+}
+
+// Append to the main configuration. Only the dedicated observer has the Docker socket.
+prometheus.scrape "containers" {
+  targets = [{"__address__" = "observer:9108", "job" = "parceldesk-containers"}]
+  scrape_interval = "10s"
+  forward_to = [prometheus.remote_write.cloud.receiver]
+}
+loki.source.api "operations_stdout" {
+  http {
+    listen_address = "0.0.0.0"
+    listen_port = 3100
+  }
+  forward_to = [loki.write.cloud.receiver]
+}
+
+// Append to the main configuration and mount postgres_password as an Alloy secret.
+// Ordinary PostgreSQL exporter metrics, not a claim of native Database Observability enablement.
+local.file "postgres_password" {
+  filename = "/run/secrets/postgres_password"
+  is_secret = true
+}
+prometheus.exporter.postgres "parceldesk" {
+  data_source_names = ["postgresql://parceldesk_monitor:" + encoding.url_encode(string.trim_space(convert.nonsensitive(local.file.postgres_password.content))) + "@postgres:5432/parceldesk?sslmode=disable"]
+  enabled_collectors = ["database", "locks", "long_running_transactions", "stat_database", "stat_user_tables"]
+}
+prometheus.scrape "postgres" {
+  targets = prometheus.exporter.postgres.parceldesk.targets
+  scrape_interval = "10s"
+  forward_to = [prometheus.relabel.postgres.receiver]
+}
+prometheus.relabel "postgres" {
+  forward_to = [prometheus.remote_write.cloud.receiver]
+  rule {
+    target_label = "job"
+    replacement = "integrations/postgres_exporter"
+  }
+  rule {
+    target_label = "service_name"
+    replacement = "parceldesk-postgres"
+  }
+}

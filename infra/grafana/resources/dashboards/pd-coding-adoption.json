@@ -1,0 +1,1024 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "pd-coding-adoption",
+    "annotations": {
+      "grafana.app/folder": "parceldesk-demo"
+    },
+    "labels": {
+      "parceldesk-owner": "demo"
+    }
+  },
+  "spec": {
+    "title": "03 \u00b7 ParcelDesk | Coding Adoption",
+    "description": "ParcelDesk production demo \u00b7 evidence over claims",
+    "tags": [
+      "parceldesk",
+      "managed-by-gcx"
+    ],
+    "annotations": [],
+    "cursorSync": "Crosshair",
+    "editable": true,
+    "preload": false,
+    "elements": {
+      "panel-1": {
+        "kind": "Panel",
+        "spec": {
+          "id": 1,
+          "title": "The story",
+          "description": "Measured observations only. Missing telemetry is not zero. See the measurement contract.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [],
+              "transformations": [],
+              "queryOptions": {
+                "maxDataPoints": 500,
+                "interval": "15s"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "text",
+            "version": "13.0.0",
+            "spec": {
+              "options": {
+                "mode": "markdown",
+                "content": "## Are the coding tools being used?\nObserved usage from this developer\u2019s real local sessions. Session volume describes activity; it does not prove productivity. Adoption percentage needs an eligible user roster and is deliberately not inferred."
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "noValue": "No observations",
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "blue",
+                        "value": null
+                      }
+                    ]
+                  },
+                  "mappings": [
+                    {
+                      "type": "special",
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "No observations",
+                          "color": "#8e8e98",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ]
+                },
+                "overrides": []
+              }
+            }
+          },
+          "transparent": true
+        }
+      },
+      "panel-2": {
+        "kind": "Panel",
+        "spec": {
+          "id": 2,
+          "title": "Sessions by coding tool",
+          "description": "Measured observations only. Missing telemetry is not zero. See the measurement contract.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "grafanacloud-prom"
+                      },
+                      "spec": {
+                        "expr": "parceldesk_coding_sessions{tool=~\"$tool\"}",
+                        "legendFormat": "{{tool}}",
+                        "instant": true,
+                        "range": false,
+                        "format": "time_series",
+                        "editorMode": "code"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {
+                "maxDataPoints": 500,
+                "interval": "15s"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "bargauge",
+            "version": "13.0.0",
+            "spec": {
+              "options": {
+                "orientation": "horizontal",
+                "displayMode": "gradient",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showUnfilled": false
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "noValue": "No observations",
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "blue",
+                        "value": null
+                      }
+                    ]
+                  },
+                  "mappings": [
+                    {
+                      "type": "special",
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "No observations",
+                          "color": "#8e8e98",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ]
+                },
+                "overrides": []
+              }
+            }
+          },
+          "transparent": false
+        }
+      },
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "id": 3,
+          "title": "Token activity by tool",
+          "description": "Measured observations only. Missing telemetry is not zero. See the measurement contract.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "grafanacloud-prom"
+                      },
+                      "spec": {
+                        "expr": "sum by(tool)(parceldesk_coding_tokens_total{tool=~\"$tool\"})",
+                        "legendFormat": "{{tool}}",
+                        "instant": true,
+                        "range": false,
+                        "format": "time_series",
+                        "editorMode": "code"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {
+                "maxDataPoints": 500,
+                "interval": "15s"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "bargauge",
+            "version": "13.0.0",
+            "spec": {
+              "options": {
+                "orientation": "horizontal",
+                "displayMode": "gradient",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showUnfilled": false
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "noValue": "No observations",
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "blue",
+                        "value": null
+                      }
+                    ]
+                  },
+                  "mappings": [
+                    {
+                      "type": "special",
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "No observations",
+                          "color": "#8e8e98",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ]
+                },
+                "overrides": []
+              }
+            }
+          },
+          "transparent": false
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "id": 4,
+          "title": "Pricing integration coverage",
+          "description": "Measured observations only. Missing telemetry is not zero. See the measurement contract.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "grafanacloud-prom"
+                      },
+                      "spec": {
+                        "expr": "parceldesk_coding_price_coverage{tool=~\"$tool\"}",
+                        "legendFormat": "{{tool}}",
+                        "instant": true,
+                        "range": false,
+                        "format": "time_series",
+                        "editorMode": "code"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {
+                "maxDataPoints": 500,
+                "interval": "15s"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.0",
+            "spec": {
+              "options": {
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "orientation": "auto",
+                "textMode": "auto",
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "text": {
+                  "valueSize": 32,
+                  "titleSize": 16
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "percentunit",
+                  "noValue": "No observations",
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "orange",
+                        "value": null
+                      },
+                      {
+                        "color": "green",
+                        "value": 1
+                      }
+                    ]
+                  },
+                  "mappings": [
+                    {
+                      "type": "special",
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "No observations",
+                          "color": "#8e8e98",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ]
+                },
+                "overrides": []
+              }
+            }
+          },
+          "transparent": false
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "id": 5,
+          "title": "Observed session inventory",
+          "description": "Measured observations only. Missing telemetry is not zero. See the measurement contract.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "grafanacloud-prom"
+                      },
+                      "spec": {
+                        "expr": "parceldesk_coding_sessions{tool=~\"$tool\"}",
+                        "legendFormat": "{{tool}}",
+                        "instant": false,
+                        "range": true,
+                        "format": "time_series",
+                        "editorMode": "code"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {
+                "maxDataPoints": 500,
+                "interval": "15s"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.0",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "calcs": []
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "noValue": "No observations",
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "blue",
+                        "value": null
+                      }
+                    ]
+                  },
+                  "mappings": [
+                    {
+                      "type": "special",
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "No observations",
+                          "color": "#8e8e98",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ],
+                  "custom": {
+                    "drawStyle": "line",
+                    "lineInterpolation": "smooth",
+                    "lineWidth": 2,
+                    "fillOpacity": 12,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisBorderShow": false,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          },
+          "transparent": false
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "id": 6,
+          "title": "Observed token inventory",
+          "description": "Measured observations only. Missing telemetry is not zero. See the measurement contract.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "grafanacloud-prom"
+                      },
+                      "spec": {
+                        "expr": "sum by(tool,type)(parceldesk_coding_tokens_total{tool=~\"$tool\"})",
+                        "legendFormat": "{{tool}} \u00b7 {{type}}",
+                        "instant": false,
+                        "range": true,
+                        "format": "time_series",
+                        "editorMode": "code"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {
+                "maxDataPoints": 500,
+                "interval": "15s"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.0",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "calcs": []
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "noValue": "No observations",
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "blue",
+                        "value": null
+                      }
+                    ]
+                  },
+                  "mappings": [
+                    {
+                      "type": "special",
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "No observations",
+                          "color": "#8e8e98",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ],
+                  "custom": {
+                    "drawStyle": "line",
+                    "lineInterpolation": "smooth",
+                    "lineWidth": 2,
+                    "fillOpacity": 12,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisBorderShow": false,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          },
+          "transparent": false
+        }
+      },
+      "panel-7": {
+        "kind": "Panel",
+        "spec": {
+          "id": 7,
+          "title": "Real source and integration evidence",
+          "description": "Measured observations only. Missing telemetry is not zero. See the measurement contract.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "loki",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "grafanacloud-logs"
+                      },
+                      "spec": {
+                        "expr": "{service_name=\"parceldesk-development\"} | json | event=~\"coding_session_imported|coding_session_enriched|coding_import_failed|session_linked\" | tool=~\"$tool\"",
+                        "queryType": "range",
+                        "maxLines": 100
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {
+                "maxDataPoints": 500,
+                "interval": "15s"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "logs",
+            "version": "13.0.0",
+            "spec": {
+              "options": {
+                "showTime": true,
+                "showLabels": false,
+                "showCommonLabels": false,
+                "wrapLogMessage": true,
+                "sortOrder": "Descending",
+                "enableLogDetails": true,
+                "prettifyLogMessage": false
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "noValue": "No observations",
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "blue",
+                        "value": null
+                      }
+                    ]
+                  },
+                  "mappings": [
+                    {
+                      "type": "special",
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "No observations",
+                          "color": "#8e8e98",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ]
+                },
+                "overrides": []
+              }
+            }
+          },
+          "transparent": false
+        }
+      },
+      "panel-8": {
+        "kind": "Panel",
+        "spec": {
+          "id": 8,
+          "title": "Scope and denominators",
+          "description": "Measured observations only. Missing telemetry is not zero. See the measurement contract.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [],
+              "transformations": [],
+              "queryOptions": {
+                "maxDataPoints": 500,
+                "interval": "15s"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "text",
+            "version": "13.0.0",
+            "spec": {
+              "options": {
+                "mode": "markdown",
+                "content": "**People:** single-presenter scope, not three developers. **Sessions:** distinct source session IDs after deduplication. **Trend:** exporter observation time, not a reconstructed historical workday. Integration failures appear in source evidence when observed. No eligible-roster adoption percentage or human hours saved is claimed."
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "noValue": "No observations",
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "blue",
+                        "value": null
+                      }
+                    ]
+                  },
+                  "mappings": [
+                    {
+                      "type": "special",
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "No observations",
+                          "color": "#8e8e98",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ]
+                },
+                "overrides": []
+              }
+            }
+          },
+          "transparent": true
+        }
+      }
+    },
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 5,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-1"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 5,
+              "width": 8,
+              "height": 6,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-2"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 8,
+              "y": 5,
+              "width": 8,
+              "height": 6,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-3"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 16,
+              "y": 5,
+              "width": 8,
+              "height": 6,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-4"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 11,
+              "width": 12,
+              "height": 6,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-5"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 12,
+              "y": 11,
+              "width": 12,
+              "height": 6,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-6"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 17,
+              "width": 24,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-7"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 25,
+              "width": 24,
+              "height": 5,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-8"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [
+      {
+        "title": "Presenter",
+        "type": "link",
+        "icon": "external link",
+        "tooltip": "Presenter",
+        "tags": [],
+        "asDropdown": false,
+        "targetBlank": false,
+        "includeVars": true,
+        "keepTime": true,
+        "url": "/d/pd-presenter"
+      },
+      {
+        "title": "Start Here",
+        "type": "link",
+        "icon": "external link",
+        "tooltip": "Start Here",
+        "tags": [],
+        "asDropdown": false,
+        "targetBlank": false,
+        "includeVars": true,
+        "keepTime": true,
+        "url": "/d/pd-overview"
+      },
+      {
+        "title": "Coding FinOps",
+        "type": "link",
+        "icon": "external link",
+        "tooltip": "Coding FinOps",
+        "tags": [],
+        "asDropdown": false,
+        "targetBlank": false,
+        "includeVars": true,
+        "keepTime": true,
+        "url": "/d/pd-coding-finops"
+      },
+      {
+        "title": "Delivery & Quality",
+        "type": "link",
+        "icon": "external link",
+        "tooltip": "Delivery & Quality",
+        "tags": [],
+        "asDropdown": false,
+        "targetBlank": false,
+        "includeVars": true,
+        "keepTime": true,
+        "url": "/d/pd-delivery-quality"
+      },
+      {
+        "title": "Agent Quality & Guardrails",
+        "type": "link",
+        "icon": "external link",
+        "tooltip": "Agent Quality & Guardrails",
+        "tags": [],
+        "asDropdown": false,
+        "targetBlank": false,
+        "includeVars": true,
+        "keepTime": true,
+        "url": "/d/pd-agent-quality"
+      },
+      {
+        "title": "Runtime & Dependencies",
+        "type": "link",
+        "icon": "external link",
+        "tooltip": "Runtime & Dependencies",
+        "tags": [],
+        "asDropdown": false,
+        "targetBlank": false,
+        "includeVars": true,
+        "keepTime": true,
+        "url": "/d/pd-runtime"
+      },
+      {
+        "title": "Demo Readiness",
+        "type": "link",
+        "icon": "external link",
+        "tooltip": "Demo Readiness",
+        "tags": [],
+        "asDropdown": false,
+        "targetBlank": false,
+        "includeVars": true,
+        "keepTime": true,
+        "url": "/d/pd-demo-readiness"
+      }
+    ],
+    "variables": [
+      {
+        "kind": "CustomVariable",
+        "spec": {
+          "name": "tool",
+          "label": "Coding tool",
+          "query": "codex,claude_code,cursor",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "options": [
+            {
+              "text": "All",
+              "value": "$__all",
+              "selected": true
+            },
+            {
+              "text": "codex",
+              "value": "codex",
+              "selected": false
+            },
+            {
+              "text": "claude_code",
+              "value": "claude_code",
+              "selected": false
+            },
+            {
+              "text": "cursor",
+              "value": "cursor",
+              "selected": false
+            }
+          ],
+          "multi": true,
+          "includeAll": true,
+          "allValue": ".*",
+          "hide": "dontHide",
+          "skipUrlSync": false,
+          "allowCustomValue": false
+        }
+      }
+    ],
+    "timeSettings": {
+      "from": "now-1h",
+      "to": "now",
+      "timezone": "browser",
+      "autoRefresh": "30s",
+      "autoRefreshIntervals": [
+        "15s",
+        "30s",
+        "1m",
+        "5m"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    }
+  }
+}

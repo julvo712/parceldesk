@@ -1,0 +1,15 @@
+name: parceldesk-tests
+services:
+  postgres:
+    image: postgres:17.9-alpine
+    environment:
+      POSTGRES_DB: parceldesk
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: local-tests-only
+    ports: ["127.0.0.1:55439:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d parceldesk"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+    mem_limit: 256m

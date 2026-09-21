@@ -1,0 +1,31 @@
+[project]
+name = "agent"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "agento11y>=0.17.0",
+    "agento11y-anthropic>=0.17.0",
+    "agento11y-gemini>=0.17.0",
+    "agento11y-openai>=0.17.0",
+    "anthropic>=0.125.0",
+    "fastapi>=0.141.1",
+    "google-genai>=1.75.0",
+    "httpx>=0.28.1",
+    "itsdangerous>=2.2.0",
+    "openai>=2.54.0",
+    "opentelemetry-exporter-otlp-proto-http>=1.44.0",
+    "opentelemetry-instrumentation-fastapi>=0.65b0",
+    "opentelemetry-instrumentation-httpx>=0.65b0",
+    "opentelemetry-sdk>=1.44.0",
+    "prometheus-client>=0.26.0",
+    "pydantic-settings>=2.15.0",
+    "pyroscope-io>=1.2.3",
+    "pyyaml>=6.0.3",
+    "uvicorn[standard]>=0.53.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+]

@@ -1,0 +1,18 @@
+# Optional alert intent. These definitions are deliberately not routed to any
+# contact point. The demo uses direct evidence and observed state by default.
+schema_version: 1
+owner: parceldesk-demo
+deployment_status: optional_not_deployed
+rules:
+  - name: ParcelDesk runtime error ratio
+    condition: "error ratio > 0.1 over 5m AND at least 20 runtime requests in 5m"
+    duration: 2m
+    rationale: Require enough traffic before treating a short demonstration as an incident.
+  - name: ParcelDesk candidate quality regression
+    condition: "failed primary business-verifier v2 trials > 0 after a completed full 36-trial experiment"
+    rationale: Candidate activation already requires independently verified passing evidence.
+  - name: ParcelDesk development telemetry stale
+    condition: "time since atomic snapshot publication exceeds the chosen meeting freshness budget"
+    rationale: A stale snapshot is missing freshness, not zero coding activity.
+notifications: none
+slo_claim: No short demonstration is presented as a meaningful 28-day SLO.

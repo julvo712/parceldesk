@@ -1,0 +1,16 @@
+{
+  "context": "demotests_gcloud",
+  "grafana_url": "https://demotests.grafana.net",
+  "cloud_tenant": "1708469",
+  "generation_endpoint": "https://agento11y-prod-eu-west-2.grafana.net",
+  "otlp_endpoint": "https://otlp-gateway-prod-eu-west-2.grafana.net/otlp",
+  "prometheus_url": "https://prometheus-prod-65-prod-eu-west-2.grafana.net/api/prom/push",
+  "prometheus_user": "3341162",
+  "loki_url": "https://logs-prod-012.grafana.net/loki/api/v1/push",
+  "loki_user": "1666256",
+  "profiles_url": "https://profiles-prod-002.grafana.net",
+  "profiles_user": "1708469",
+  "faro_collect_url": "https://faro-collector-prod-eu-west-2.grafana.net/collect/REPLACE_WITH_FARO_APP_KEY",
+  "llm_provider": "anthropic",
+  "llm_model": "claude-sonnet-4-5-20250929"
+}

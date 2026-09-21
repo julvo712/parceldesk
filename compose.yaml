@@ -1,0 +1,152 @@
+name: parceldesk
+services:
+  postgres:
+    image: postgres:17.9-alpine
+    environment:
+      POSTGRES_DB: parceldesk
+      POSTGRES_USER: parceldesk
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?run tools/write_env.py}
+    volumes:
+    - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - pg_isready -U parceldesk
+      interval: 3s
+      timeout: 2s
+      retries: 20
+    mem_limit: 512m
+    restart: unless-stopped
+  operations:
+    image: parceldesk/operations:0.1.0
+    build: services/operations
+    environment:
+      DATABASE_URL: postgres://parceldesk:${POSTGRES_PASSWORD}@postgres:5432/parceldesk?sslmode=disable
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN}
+      CARRIER_URL: http://carrier:8081
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://alloy:4318
+      OTEL_EXPORTER_OTLP_HEADERS: ''
+      PYROSCOPE_SERVER_ADDRESS: http://alloy:4040
+    depends_on:
+      postgres:
+        condition: service_healthy
+    cpus: 1.0
+    mem_limit: 256m
+    restart: unless-stopped
+  carrier:
+    image: parceldesk/operations:0.1.0
+    build: services/operations
+    entrypoint: /usr/local/bin/carrier
+    environment:
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN}
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://alloy:4318
+      OTEL_EXPORTER_OTLP_HEADERS: ''
+    mem_limit: 128m
+    restart: unless-stopped
+  agent-api:
+    image: parceldesk/agent-api:0.1.0
+    build:
+      context: .
+      dockerfile: apps/agent/Dockerfile
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://alloy:4318
+      OTEL_EXPORTER_OTLP_HEADERS: ''
+      AGENT_DIR: /app/agents/replacement
+      LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
+      LLM_MODEL: ${LLM_MODEL:-claude-sonnet-4-5-20250929}
+      PYTHONPATH: /app/src:/app/tools
+    secrets:
+    - cloud_token
+    - anthropic_key
+    - gemini_key
+    - service_token
+    - session_key
+    volumes:
+    - ./agents:/app/agents:ro
+    - ./evals:/app/evals:ro
+    - ./fixtures:/app/fixtures:ro
+    - ./runs:/app/runs
+    - ./tools:/app/tools:ro
+    - agent-telemetry-data:/data/telemetry
+    depends_on:
+    - operations
+    - carrier
+    - alloy
+    mem_limit: 512m
+    restart: unless-stopped
+    healthcheck:
+      test:
+      - CMD
+      - python
+      - -c
+      - import urllib.request; urllib.request.urlopen("http://localhost:8000/health/ready",timeout=2)
+      interval: 5s
+      timeout: 3s
+      retries: 12
+  alloy:
+    image: grafana/alloy:v1.16.0
+    command:
+    - run
+    - --server.http.listen-addr=0.0.0.0:12345
+    - --storage.path=/var/lib/alloy
+    - /etc/alloy/config.alloy
+    volumes:
+    - ./infra/alloy/config.alloy:/etc/alloy/config.alloy:ro
+    - alloy-data:/var/lib/alloy
+    secrets:
+    - cloud_token
+    - profiles_token
+    - postgres_password
+    mem_limit: 512m
+    restart: unless-stopped
+  web:
+    image: parceldesk/web:0.1.0
+    build: apps/web
+    ports:
+    - 127.0.0.1:3100:8080
+    - 127.0.0.1:3101:8081
+    volumes:
+    - ./infra/web/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      agent-api:
+        condition: service_healthy
+    mem_limit: 128m
+    restart: unless-stopped
+  observer:
+    image: parceldesk/observer:0.1.0
+    build: tools/observer
+    environment:
+      LOKI_PUSH_URL: http://alloy:3100/loki/api/v1/push
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+    - observer-data:/var/lib/observer
+    depends_on:
+    - alloy
+    read_only: true
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 128m
+    cpus: 0.25
+    restart: unless-stopped
+volumes:
+  agent-telemetry-data: null
+  postgres-data: null
+  alloy-data: null
+  observer-data: null
+secrets:
+  cloud_token:
+    file: .secrets/cloud_token
+  anthropic_key:
+    file: .secrets/anthropic_key
+  service_token:
+    file: .secrets/service_token
+  session_key:
+    file: .secrets/session_key
+  profiles_token:
+    file: .secrets/profiles_token
+  gemini_key:
+    file: .secrets/gemini_key
+  postgres_password:
+    file: .secrets/postgres_password

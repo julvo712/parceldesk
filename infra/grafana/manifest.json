@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "owner": "parceldesk-demo",
+  "context": "demotests_gcloud",
+  "server": "https://demotests.grafana.net",
+  "folder": "parceldesk-demo",
+  "dashboard_api": "dashboard.grafana.app/v2",
+  "datasources": {
+    "prometheus": "grafanacloud-prom",
+    "loki": "grafanacloud-logs",
+    "tempo": "grafanacloud-traces",
+    "pyroscope": "grafanacloud-profiles"
+  },
+  "dashboards": [
+    {
+      "uid": "pd-presenter",
+      "title": "00 \u00b7 ParcelDesk | Presenter",
+      "path": "resources/dashboards/pd-presenter.json",
+      "url": "https://demotests.grafana.net/d/pd-presenter"
+    },
+    {
+      "uid": "pd-overview",
+      "title": "01 \u00b7 ParcelDesk | Start Here",
+      "path": "resources/dashboards/pd-overview.json",
+      "url": "https://demotests.grafana.net/d/pd-overview"
+    },
+    {
+      "uid": "pd-coding-finops",
+      "title": "02 \u00b7 ParcelDesk | Coding FinOps",
+      "path": "resources/dashboards/pd-coding-finops.json",
+      "url": "https://demotests.grafana.net/d/pd-coding-finops"
+    },
+    {
+      "uid": "pd-coding-adoption",
+      "title": "03 \u00b7 ParcelDesk | Coding Adoption",
+      "path": "resources/dashboards/pd-coding-adoption.json",
+      "url": "https://demotests.grafana.net/d/pd-coding-adoption"
+    },
+    {
+      "uid": "pd-delivery-quality",
+      "title": "04 \u00b7 ParcelDesk | Delivery & Quality",
+      "path": "resources/dashboards/pd-delivery-quality.json",
+      "url": "https://demotests.grafana.net/d/pd-delivery-quality"
+    },
+    {
+      "uid": "pd-agent-quality",
+      "title": "05 \u00b7 ParcelDesk | Agent Quality & Guardrails",
+      "path": "resources/dashboards/pd-agent-quality.json",
+      "url": "https://demotests.grafana.net/d/pd-agent-quality"
+    },
+    {
+      "uid": "pd-runtime",
+      "title": "06 \u00b7 ParcelDesk | Runtime & Dependencies",
+      "path": "resources/dashboards/pd-runtime.json",
+      "url": "https://demotests.grafana.net/d/pd-runtime"
+    },
+    {
+      "uid": "pd-demo-readiness",
+      "title": "07 \u00b7 ParcelDesk | Demo Readiness",
+      "path": "resources/dashboards/pd-demo-readiness.json",
+      "url": "https://demotests.grafana.net/d/pd-demo-readiness"
+    }
+  ]
+}

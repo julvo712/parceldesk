@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-09-15T15:35:57.509158+00:00",
+  "project": "parceldesk",
+  "images": [
+    {
+      "id": "sha256:d50cd7c6a87e420d23088199400b7191586000dc6ce74fb03c936a7d7ac9a6b4",
+      "architecture": "arm64",
+      "os": "linux",
+      "repo_digests": [
+        "parceldesk/agent-api@sha256:d50cd7c6a87e420d23088199400b7191586000dc6ce74fb03c936a7d7ac9a6b4"
+      ],
+      "service": "agent-api",
+      "running": true
+    },
+    {
+      "id": "sha256:6e00cf7c5a692ff5f24844529416ed017d76fce922f8199004e73d5eca46b6b8",
+      "architecture": "arm64",
+      "os": "linux",
+      "repo_digests": [
+        "grafana/alloy@sha256:6e00cf7c5a692ff5f24844529416ed017d76fce922f8199004e73d5eca46b6b8"
+      ],
+      "service": "alloy",
+      "running": true
+    },
+    {
+      "id": "sha256:2457cd38d5e8da0bd02a1bc6c23685e383b4d9f070b688748ed85c4b7a1a79a3",
+      "architecture": "arm64",
+      "os": "linux",
+      "repo_digests": [
+        "parceldesk/operations@sha256:2457cd38d5e8da0bd02a1bc6c23685e383b4d9f070b688748ed85c4b7a1a79a3"
+      ],
+      "service": "carrier",
+      "running": true
+    },
+    {
+      "id": "sha256:a6b27f02d250d3782f5f939abaa4862861c2f1e7afa164a84197e76d4822238c",
+      "architecture": "arm64",
+      "os": "linux",
+      "repo_digests": [
+        "parceldesk/observer@sha256:a6b27f02d250d3782f5f939abaa4862861c2f1e7afa164a84197e76d4822238c"
+      ],
+      "service": "observer",
+      "running": true
+    },
+    {
+      "id": "sha256:2457cd38d5e8da0bd02a1bc6c23685e383b4d9f070b688748ed85c4b7a1a79a3",
+      "architecture": "arm64",
+      "os": "linux",
+      "repo_digests": [
+        "parceldesk/operations@sha256:2457cd38d5e8da0bd02a1bc6c23685e383b4d9f070b688748ed85c4b7a1a79a3"
+      ],
+      "service": "operations",
+      "running": true
+    },
+    {
+      "id": "sha256:c7526c0f6c3f30260a563d7bcf8ad778effac59a44f8ffa86678c35418338609",
+      "architecture": "arm64",
+      "os": "linux",
+      "repo_digests": [
+        "postgres@sha256:c7526c0f6c3f30260a563d7bcf8ad778effac59a44f8ffa86678c35418338609"
+      ],
+      "service": "postgres",
+      "running": true
+    },
+    {
+      "id": "sha256:fa940d1d7459f9045039fda19f729b54239deb074fd732068810575c76c494df",
+      "architecture": "arm64",
+      "os": "linux",
+      "repo_digests": [
+        "parceldesk/web@sha256:fa940d1d7459f9045039fda19f729b54239deb074fd732068810575c76c494df"
+      ],
+      "service": "web",
+      "running": true
+    }
+  ],
+  "note": "Local content IDs are immutable but not registry distribution references. ARM64/AMD64 OCI archives require build.py --images and their own runtime acceptance."
+}

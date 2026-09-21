@@ -1,0 +1,20 @@
+# Merge this service/volume and secret into the project's main compose.yaml.
+services:
+  observer:
+    build: tools/observer
+    environment:
+      LOKI_PUSH_URL: http://alloy:3100/loki/api/v1/push
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - observer-data:/var/lib/observer
+    depends_on: [alloy]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 128m
+    cpus: 0.25
+    restart: unless-stopped
+volumes:
+  observer-data:
+# Add postgres_password to alloy.secrets and top-level secrets:
+# postgres_password: {file: .secrets/postgres_password}

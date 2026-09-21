@@ -1,0 +1,13 @@
+// Append to the main configuration. Only the dedicated observer has the Docker socket.
+prometheus.scrape "containers" {
+  targets = [{"__address__" = "observer:9108", "job" = "parceldesk-containers"}]
+  scrape_interval = "10s"
+  forward_to = [prometheus.remote_write.cloud.receiver]
+}
+loki.source.api "operations_stdout" {
+  http {
+    listen_address = "0.0.0.0"
+    listen_port = 3100
+  }
+  forward_to = [loki.write.cloud.receiver]
+}

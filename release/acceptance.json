@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "release_version": "0.1.0",
+  "initial_host": "macOS Apple Silicon",
+  "linux_arm64": {
+    "status": "end_to_end_verified_on_initial_host",
+    "evidence": [
+      "docs/release-verification.md",
+      "docs/verification/automated-release-check.json",
+      "apps/web/verification/final-accepted/README.md",
+      "infra/grafana/evidence/values.json",
+      "docs/verification/go-fault-rehearsal.md"
+    ],
+    "scope": "Live browser confirmation and retry/refresh persistence, native guards/generations, same-model baseline33/36 and accepted36/36 plus separate heldout3/3, all seven dashboards and Cloud signal readback, full automated release gate, real faults and recovery."
+  },
+  "linux_amd64": {
+    "status": "isolated_runtime_smoke_verified_under_emulation",
+    "evidence": [
+      "docs/verification/amd64-runtime.json",
+      "docs/verification/amd64-runtime.md"
+    ],
+    "scope": "Actual Linux x86_64 Go/carrier/PostgreSQL/Python/web containers on Docker Desktop Apple Silicon emulation. Eight business tools, concurrent idempotency, authorization, UI/API and actual Anthropic provider call passed. No physical x86 host or native Cloud guard/eval acceptance claim."
+  },
+  "presenter_pilot": {
+    "required_presenters": 2,
+    "completed_presenters": 0,
+    "clean_machine_installation": "pending",
+    "status": "pending_human_pilot"
+  },
+  "release_classification": "internal release candidate; broad rollout requires recorded acceptance gates"
+}
