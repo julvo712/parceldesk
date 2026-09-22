@@ -210,7 +210,7 @@ async def orders(request:Request):
     items=data.get('orders',[]) if isinstance(data,dict) else data
     for x in items:
         x['order_id']=x.get('order_id',x.get('id'));x['product_name']=x.get('product_name',x.get('product','Arc One headphones'));x['image']='/images/headphones.webp'
-    return {'orders':items,'customer':{'customer_id':s['customer_id'],'name':CUSTOMER_NAMES[s['customer_id']]}}
+    return JSONResponse({'orders':items,'customer':{'customer_id':s['customer_id'],'name':CUSTOMER_NAMES[s['customer_id']]}})
 @app.post('/api/conversations')
 async def new_conversation(body:Conversation,request:Request):
     s=session(request);cid=str(uuid.uuid4())
